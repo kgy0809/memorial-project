@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="public :: head">
+</head>
+
+<body>
+<!-- 左侧菜单 - 开始 -->
+<div class="frameMenu">
+    <div class="logo">
+        <img th:src="@{/images/login.png}"/>
+        <div class="logoText">
+            <h1>追思网管理系统</h1>
+            <p>ZHUISIWANG</p>
+        </div>
+    </div>
+    <div class="menu">
+        <ul th:each="p : ${menu}">
+            <li th:if="${p.pid} == 0">
+                <a class="menuFA" href="javascript:void(0)">
+                    <i class="iconfont icon-liuliangyunpingtaitubiao03 left"></i>
+                    [[${p.name}]]
+                    <i class="iconfont icon-dajiantouyou right"></i>
+                </a>
+                <dl th:each="q : ${menu}">
+                    <dt th:if="${p.id}==${q.pid}">
+                        <a href="javascript:void(0)" th:onclick="menuCAClick([[${q.url}]],this)"
+                           th:text="${q.name}"></a>
+                    </dt>
+                </dl>
+            </li>
+        </ul>
+    </div>
+</div>
+<!-- 左侧菜单 - 结束 -->
+
+<div class="main">
+    <!-- 头部栏 - 开始 -->
+    <div class="frameTop">
+        <img class="jt" th:src="@{/images/top_jt.png}"/>
+        <div class="topMenu">
+            <ul>
+                <!--						<li><a href="javascript:void(0)" onclick="menuCAClick('tgls/modify_password.html',this)"><i class="iconfont icon-yonghu1"></i>管理员</a></li>
+                                        <li><a href="javascript:void(0)" onclick="menuCAClick('tgls/modify_password.html',this)"><i class="iconfont icon-xiugaimima"></i>修改密码</a></li>-->
+<!--                <li><a href="javascript:void(0)" th:onclick="menuCAClick('/api/greenhome/login/password',this)"><i
+                        class="iconfont icon-xiugaimima"></i>修改密码</a></li>-->
+                <li><a href="javascript:void(0)" th:onclick="menuCAClick('/api/greenhome/login/password',this)"><i
+                        class="iconfont icon-xiugaimima"></i>修改密码</a></li>
+                <li><a th:href="@{/login/loginOut}"><i class="iconfont icon-084tuichu"></i>注销</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- 头部栏 - 结束 -->
+
+    <!-- 核心区域 - 开始 -->
+    <div class="frameMain">
+        <div class="title" id="frameMainTitle">
+            <span><i class="iconfont icon-xianshiqi"></i>后台首页</span>
+        </div>
+        <div class="con">
+            <iframe id="mainIframe" th:src="@{/user/tz}" scrolling="no"></iframe>
+        </div>
+    </div>
+    <!-- 核心区域 - 结束 -->
+</div>
+</body>
+
+</html>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="public :: head">
+</head>
+
+<body>
+
+<div class="cBody">
+    <div class="layui-form-item">
+        <div style="display: flex;justify-content: space-between">
+        </div>
+    </div>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>创建人昵称</th>
+            <th>名字-昵称</th>
+            <th>地点</th>
+            <th>时间</th>
+            <th>是否在首页</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <!-- layUI 分页模块 -->
+    <div id="pages"></div>
+</div>
+</body>
+<script>
+    ajaxFun(1, 10);
+
+    function ajaxFun(page, rows) {
+        $.ajax({
+            url: "[[@{/ancestral}]]",
+            type: 'POST',
+            data: {
+                page: page,
+                rows: rows,
+            },
+            success(res) {
+                var html = '';
+                $.each(res.rows, function (index, ele) {
+                    var state = '';
+                    if (ele.state === '1'){
+                        state = '<td>' + '是' + '</td>' ;
+                    }else {
+                        state = '<td>' + '否' + '</td>' ;
+                    }
+                    html += ' <tr>' +
+                        '            <td>' + ele.id + '</td>' +
+                        '            <td>' + ele.loginName + '</td>' +
+                        '            <td>' + ele.text + '</td>' +
+                        '            <td>' + ele.site + '</td>' +
+                        '            <td>' + ele.time + '</td>' +
+                        state +
+                        '            <td>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="updateBut(this)">修改</a>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="catCustomList(this)">查看生平</a>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="delCustomList(this)">删除</a>' +
+                        '            </td>' +
+                        '        </tr>';
+                });
+                $('tbody').empty().html(html);
+                listPage(res.total, page);
+            }
+        })
+    }
+
+    function listPage(total, page) {
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            var limits = total / 10;
+            //总页数大于页码总数
+            laypage.render({
+                elem: 'pages'
+                , count: total,
+                limit: 10,
+                curr: page
+                , layout: ['count', 'prev', 'page', 'next']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        ajaxFun(obj.curr, 10);
+                    }
+                }
+            });
+        });
+    }
+
+    //查看留言
+    function catCustomList(e) {
+        var id = $(e).data("id");
+        location.href = "[[@{/ancestral/view?id=}]]" + id
+    }
+
+    //删除
+    function delCustomList(e) {
+        var id = $(e).data("id");
+        layui.use(['form', 'laydate'], function () {
+            layer.confirm('确定要删除么？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    "type": "delete",
+                    "dataType": 'json',
+                    "url": "[[@{/ancestral/}]]" + id,
+                    "success": function (res) {
+                        layer.msg(res.msg);
+                        $(e).parent().parent().remove();
+                        layer.msg('删除成功', {
+                            icon: 1
+                        });
+                    },
+                    error: function (res) {
+                        console.log(res);
+                    }
+
+                });
+            }, function () {
+                layer.msg('取消删除', {
+                    time: 2000 //20s后自动关闭
+                });
+            });
+        });
+    }
+
+    //修改
+    function updateBut(e) {
+        var id = $(e).data('id');
+        location.href = "[[@{/ancestral/hx?id=}]]" + id;
+    }
+</script>
+
+</html>

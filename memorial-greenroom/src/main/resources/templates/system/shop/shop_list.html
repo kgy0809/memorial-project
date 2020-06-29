@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="public :: head">
+</head>
+
+<body>
+
+<div class="cBody">
+    <div class="layui-form-item">
+        <div style="display: flex;justify-content: space-between">
+            <div class="console">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="insertBut()">单品新增</button>
+                <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="insertDoubleBut()">套餐新增</button>
+            </div>
+<!--            <div>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" id="id" value="" placeholder="输入用户ID" autocomplete="off"
+                           class="layui-input">
+                </div>
+
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" value="" placeholder="输入登录名" autocomplete="off"
+                           class="layui-input">
+                </div>
+                &lt;!&ndash;                <div class="layui-input-inline">
+                                    <input type="text" name="phone" id="phone" value="" placeholder="输入手机号" class="layui-input">
+                                </div>&ndash;&gt;
+                <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="Btn_Ss">搜索</button>
+            </div>-->
+        </div>
+    </div>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th style="text-align:center">ID</th>
+            <th style="text-align:center">商品名称</th>
+            <th style="text-align:center">商品价格</th>
+            <th style="text-align:center">元/小时</th>
+            <th style="text-align:center">区域</th>
+            <th style="text-align:center">操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+
+        </tbody>
+    </table>
+
+    <!-- layUI 分页模块 -->
+    <div id="pages"></div>
+</div>
+</body>
+<script>
+    ajaxFun(1, 10);
+/*    var id = '';
+    var name = '';
+    var phone = '';
+    $('#Btn_Ss').click(function () {
+        id = $('#id').val();
+        name = $('#name').val();
+        phone = $('#phone').val();
+        ajaxFun()
+    });*/
+
+    function ajaxFun(page, rows) {
+        $.ajax({
+            url: "[[@{/shop}]]",
+            type: 'POST',
+            data: {
+                page: page,
+                rows: rows,
+            },
+            success(res) {
+                var html = '';
+                $.each(res.rows, function (index, ele) {
+                    var state = '';
+                    if (ele.state === '1'){
+                        state = '            <td>' + '单品' + '</td>';
+                    }else {
+                        state = '            <td>' + '套餐' + '</td>';
+                    }
+                    html += ' <tr>' +
+                        '            <td>' + ele.id + '</td>' +
+                        '            <td>' + ele.name + '</td>' +
+                        '            <td >' + ele.doublePrice + '</td>' +
+                        '            <td >' + ele.hour + '</td>' +
+                        state +
+                        '            <td>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="updateBut(this)">修改</a>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="delCustomList(this)">删除</a>' +
+                        '            </td>' +
+                        '        </tr>';
+                });
+                $('tbody').empty().html(html);
+                listPage(res.total, page);
+            }
+        })
+    }
+
+    function listPage(total, page) {
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            var limits = total / 10;
+            //总页数大于页码总数
+            laypage.render({
+                elem: 'pages'
+                , count: total,
+                limit: 10,
+                curr: page
+                , layout: ['count', 'prev', 'page', 'next']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        ajaxFun(obj.curr, 10);
+                    }
+                }
+            });
+        });
+    }
+
+    //单品新增
+    function insertBut() {
+        location.href = "[[@{/shop/add}]]"
+    }
+    //套餐添加
+    function insertDoubleBut() {
+        location.href = "[[@{/shop/double/add}]]"
+    }
+
+    //删除
+    function delCustomList(e) {
+        var id = $(e).data("id");
+        layui.use(['form', 'laydate'], function () {
+            layer.confirm('确定要删除么？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    "type": "delete",
+                    "dataType": 'json',
+                    "url": "[[@{/shop/}]]" + id,
+                    "success": function (res) {
+                        layer.msg(res.msg);
+                        $(e).parent().parent().remove();
+                        layer.msg('删除成功', {
+                            icon: 1
+                        });
+                    },
+                    error: function (res) {
+                        console.log(res);
+                    }
+
+                });
+            }, function () {
+                layer.msg('取消删除', {
+                    time: 2000 //20s后自动关闭
+                });
+            });
+        });
+    }
+
+    //修改
+    function updateBut(e) {
+        var id = $(e).data('id');
+        location.href = "[[@{/shop/hx?id=}]]" + id;
+    }
+
+</script>
+</html>

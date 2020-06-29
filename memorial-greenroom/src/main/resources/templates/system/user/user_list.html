@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="public :: head">
+</head>
+
+<body>
+
+<div class="cBody">
+    <div class="layui-form-item">
+        <div style="display: flex;justify-content: space-between">
+            <div class="console">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="insertBut()">新增</button>
+            </div>
+            <div>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" id="id" value="" placeholder="输入用户ID" autocomplete="off"
+                           class="layui-input">
+                </div>
+
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" value="" placeholder="输入登录名" autocomplete="off"
+                           class="layui-input">
+                </div>
+                <!--                <div class="layui-input-inline">
+                                    <input type="text" name="phone" id="phone" value="" placeholder="输入手机号" class="layui-input">
+                                </div>-->
+                <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="Btn_Ss">搜索</button>
+            </div>
+        </div>
+    </div>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>登录名</th>
+            <th>身份</th>
+            <th>店铺</th>
+            <th>注册日期</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+
+
+        </tbody>
+    </table>
+
+    <!-- layUI 分页模块 -->
+    <div id="pages"></div>
+    <script>
+        ajaxFun(1, 10);
+        var id = '';
+        var name = '';
+        var phone = '';
+        $('#Btn_Ss').click(function () {
+            id = $('#id').val();
+            name = $('#name').val();
+            phone = $('#phone').val();
+            ajaxFun()
+        });
+
+        function ajaxFun(page, rows) {
+            $.ajax({
+                url: "/user",
+                type: 'POST',
+                data: {
+                    page: page,
+                    rows: rows,
+                    id: id,
+                    name: name,
+                    phone: phone
+                },
+                success(res) {
+                    var html = '';
+                    $.each(res.rows, function (index, ele) {
+                        html += ' <tr>' +
+                            '            <td>' + ele.id + '</td>' +
+                            '            <td>' + ele.username + '</td>' +
+                            '            <td >' + ele.name + '</td>' +
+                            '            <td >' + ele.storeName + '</td>' +
+                            '            <td>' + ele.time + '</td>' +
+                            '            <td>' +
+                            '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="updateBut(this)">修改</a>' +
+                            '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="delCustomList(this)">删除</a>' +
+                            '            </td>' +
+                            '        </tr>';
+                    });
+                    $('tbody').empty().html(html);
+                    listPage(res.total, page);
+                }
+            })
+        }
+
+        function listPage(total, page) {
+            layui.use('laypage', function () {
+                var laypage = layui.laypage;
+                var limits = total / 10;
+                //总页数大于页码总数
+                laypage.render({
+                    elem: 'pages'
+                    , count: total,
+                    limit: 10,
+                    curr: page
+                    , layout: ['count', 'prev', 'page', 'next']
+                    , jump: function (obj, first) {
+                        if (!first) {
+                            ajaxFun(obj.curr, 10);
+                        }
+                    }
+                });
+            });
+        }
+
+        //新增
+        function insertBut() {
+            location.href = "/user/add"
+        }
+
+        //删除
+        function delCustomList(e) {
+            var id = $(e).data("id");
+            layui.use(['form', 'laydate'], function () {
+                layer.confirm('确定要删除么？', {
+                    btn: ['确定', '取消'] //按钮
+                }, function () {
+                    $.ajax({
+                        "type": "delete",
+                        "dataType": 'json',
+                        "url": "/user/" + id,
+                        "success": function (res) {
+                            layer.msg(res.msg);
+                            $(e).parent().parent().remove();
+                            layer.msg('删除成功', {
+                                icon: 1
+                            });
+                        },
+                        error: function (res) {
+                            console.log(res);
+                        }
+
+                    });
+                }, function () {
+                    layer.msg('取消删除', {
+                        time: 2000 //20s后自动关闭
+                    });
+                });
+            });
+        }
+
+        //修改
+        function updateBut(e) {
+            var id = $(e).data('id');
+            location.href = "/user/add?id=" + id;
+        }
+    </script>
+</div>
+</body>
+
+</html>

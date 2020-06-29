@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<head th:replace="public :: head">
+    <style>
+        .layui-form {
+            margin-right: 30%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="cBody">
+    <form id="addForm" class="layui-form">
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label">生平</label>
+            <div class="layui-input-block">
+                <textarea name="text" th:text="${memorial.text}"
+                          style="width: 850px;height: 300px;"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <input class="layui-btn layui-btn-primary" onClick="history.go(-1)" value="返回" type="button">
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+
+</html>

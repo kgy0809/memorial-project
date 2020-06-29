@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="public :: head">
+    <style>
+        .layui-form {
+            margin-right: 30%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="cBody">
+    <form id="addForm" class="layui-form" th:action="@{/shop/save}" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片</label>
+            <div class="layui-upload-drag" id="goodsPic">
+                <input name="img" type="hidden" id="image"/>
+                <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p>
+                <img class="layui-upload-img" id="demo1">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品名称</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="name" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">价格</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="price1" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">元/小时</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="hour" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+<!--        <div class="layui-form-item">
+            <label class="layui-form-label">状态</label>
+            <div class="layui-input-inline">
+                <select name="state" lay-verify="required" lay-search="">
+                    <option value="1">上架</option>
+                    <option value="2">下架</option>
+                </select>
+            </div>
+        </div>-->
+<!--        <div class="layui-form-item">
+            <label class="layui-form-label">权重</label>
+            <div class="layui-input-inline">
+                <input type="text" name="weight" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>-->
+<!--        <div class="layui-form-item">
+            <label class="layui-form-label">商品详情</label>
+            <div class="layui-input-inline" >
+                <div id="editor" style="height: 350px;width: 850px" onmouseleave="lkMouseleave(this)">
+                </div>
+                <input type="hidden" id="text" name="text" value="" />
+            </div>
+        </div>-->
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script>
+    layui.use(['upload', 'form'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        //拖拽上传
+        upload.render({
+            elem: '#goodsPic',
+            url: '[[@{/banner/insert}]]'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code != 200) {
+                    return layer.msg('上传失败');
+                } else {
+                    $("#image").val(res.src);
+                    return layer.msg('上传成功');
+                }
+            }
+        });
+    });
+
+/*    /!*富文本*!/
+    var E = window.wangEditor;
+    var editor = new E('#editor');
+    // 或者 var editor = new E( document.getElementById('editor') )
+    // 配置服务器端地址
+    editor.customConfig.uploadImgServer = '/upload/insert';
+    //配置指定文件名
+    editor.customConfig.uploadFileName = 'file';
+    //如果图片不大，可以用base64存储
+    //editor.customConfig.uploadImgShowBase64 = true
+    editor.customConfig.uploadImgMaxSize = 10 * 1024 * 1024
+    editor.create();
+    /!*赋值*!/
+    function lkMouseleave(e) {
+        $('#text').val(editor.txt.html());
+    }*/
+</script>
+</html>

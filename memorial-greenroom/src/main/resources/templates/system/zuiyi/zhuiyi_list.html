@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+<head th:replace="public :: head">
+</head>
+
+<body>
+
+<div class="cBody">
+    <div class="layui-form-item">
+        <div style="display: flex;justify-content: space-between">
+            <div class="console">
+                <button class="layui-btn" lay-submit lay-filter="formDemo" onclick="insertBut()">新增</button>
+            </div>
+            <!--<div>
+                <div class="layui-input-inline">
+                    <input type="text" name="id" id="id" value="" placeholder="输入用户ID" autocomplete="off"
+                           class="layui-input">
+                </div>
+
+                <div class="layui-input-inline">
+                    <input type="text" name="name" id="name" value="" placeholder="输入登录名" autocomplete="off"
+                           class="layui-input">
+                </div>
+                &lt;!&ndash;                <div class="layui-input-inline">
+                                    <input type="text" name="phone" id="phone" value="" placeholder="输入手机号" class="layui-input">
+                                </div>&ndash;&gt;
+                <button class="layui-btn" lay-submit="" lay-filter="formDemo" id="Btn_Ss">搜索</button>
+            </div>-->
+        </div>
+    </div>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>标题</th>
+            <th>图片</th>
+            <th>状态</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+    <!-- layUI 分页模块 -->
+    <div id="pages"></div>
+</div>
+</body>
+<script>
+    ajaxFun(1, 10);
+
+    function ajaxFun(page, rows) {
+        $.ajax({
+            url: "[[@{/details}]]",
+            type: 'POST',
+            data: {
+                page: page,
+                rows: rows,
+            },
+            success(res) {
+                var html = '';
+                $.each(res.rows, function (index, ele) {
+                    var state = '';
+                    if (ele.state === '1'){
+                        state = '<td>' + '置顶' + '</td>' ;
+                    }else {
+                        state = '<td>' + '未置顶' + '</td>' ;
+                    }
+                    html += ' <tr>' +
+                        '            <td>' + ele.id + '</td>' +
+                        '            <td>' + ele.title + '</td>' +
+                        '            <td><img width="20" height="20" onmouseenter="imgBig(this)"' +
+                        '                     onmouseleave="imgSmall(this)" src="' + ele.img + '"/></td>' +
+                        state +
+                        '            <td>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="updateBut(this)">修改</a>' +
+                        '                <a class="layui-btn layui-btn-xs" data-id="' + ele.id + '" onclick="delCustomList(this)">删除</a>' +
+                        '            </td>' +
+                        '        </tr>';
+                });
+                $('tbody').empty().html(html);
+                listPage(res.total, page);
+            }
+        })
+    }
+
+    function listPage(total, page) {
+        layui.use('laypage', function () {
+            var laypage = layui.laypage;
+            var limits = total / 10;
+            //总页数大于页码总数
+            laypage.render({
+                elem: 'pages'
+                , count: total,
+                limit: 10,
+                curr: page
+                , layout: ['count', 'prev', 'page', 'next']
+                , jump: function (obj, first) {
+                    if (!first) {
+                        ajaxFun(obj.curr, 10);
+                    }
+                }
+            });
+        });
+    }
+
+    //新增
+    function insertBut() {
+        location.href = "[[@{/details/add}]]"
+    }
+
+    //删除
+    function delCustomList(e) {
+        var id = $(e).data("id");
+        layui.use(['form', 'laydate'], function () {
+            layer.confirm('确定要删除么？', {
+                btn: ['确定', '取消'] //按钮
+            }, function () {
+                $.ajax({
+                    "type": "delete",
+                    "dataType": 'json',
+                    "url": "[[@{/details/}]]" + id,
+                    "success": function (res) {
+                        layer.msg(res.msg);
+                        $(e).parent().parent().remove();
+                        layer.msg('删除成功', {
+                            icon: 1
+                        });
+                    },
+                    error: function (res) {
+                        console.log(res);
+                    }
+
+                });
+            }, function () {
+                layer.msg('取消删除', {
+                    time: 2000 //20s后自动关闭
+                });
+            });
+        });
+    }
+
+    //修改
+    function updateBut(e) {
+        var id = $(e).data('id');
+        location.href = "[[@{/details/hx?id=}]]" + id;
+    }
+</script>
+
+</html>

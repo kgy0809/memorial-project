@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<head th:replace="public :: head">
+    <style>
+        .layui-table img {
+            max-width: none;
+        }
+    </style>
+</head>
+<body>
+<div class="cBody">
+    <div class="console">
+        <button type="button" class="layui-btn" id="test6"><i class="layui-icon"></i>上传背景音乐</button>
+    </div>
+</div>
+</body>
+<script>
+    layui.use('upload', function () {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        upload.render({
+            elem: '#test6'
+            , url: '[[@{/music/insert}]]' //改成您自己的上传接口
+            , accept: 'audio' //音频
+            , done: function (res) {
+                //如果上传失败
+                if (res.code != 200) {
+                    return layer.msg('上传失败');
+                } else {
+                    $("#image").val(res.src);
+                    return layer.msg('上传成功');
+                }
+            }
+        });
+    });
+</script>
+</html>

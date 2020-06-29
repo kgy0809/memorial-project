@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+
+
+<head th:replace="public :: head">
+    <style>
+        .layui-form {
+            margin-right: 30%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="cBody">
+    <form id="addForm" class="layui-form" th:action="@{/ancestral/save}" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否在首页</label>
+            <div class="layui-input-block">
+                <input type="radio" name="state" value="1" th:checked="@{(${memorial.state == '1'}? 'true' : 'false')}"
+                       title="是">
+                <input type="radio" name="state" value="2" th:checked="@{(${memorial.state == '1'}? 'false' : 'true')}"
+                       title="否">
+                <input type="hidden" name="id" th:value="${memorial.id}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
+                <input class="layui-btn layui-btn-primary" onClick="history.go(-1)" value="返回" type="button">
+            </div>
+        </div>
+    </form>
+
+</div>
+</body>
+</html>

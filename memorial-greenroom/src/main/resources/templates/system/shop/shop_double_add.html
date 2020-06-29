@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.w3.org/1999/xhtml">
+<head th:replace="public :: head">
+    <style>
+        .layui-form {
+            margin-right: 30%;
+        }
+    </style>
+</head>
+
+<body>
+<div class="cBody">
+    <form id="addForm" class="layui-form" th:action="@{/shop/double/save}" method="post">
+        <div class="layui-form-item">
+            <label class="layui-form-label">图片</label>
+            <div class="layui-upload-drag" id="goodsPic">
+                <input name="img" type="hidden" id="image"/>
+                <i class="layui-icon"></i>
+                <p>点击上传，或将文件拖拽到此处</p>
+                <img class="layui-upload-img" id="demo1">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">商品名称</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="name" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">价格</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="price1" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">元/小时</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="hour" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item tradd">
+            <button type="button" class="layui-btn layui-btn-sm"><i class="layui-icon"></i></button>
+        </div>
+
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="submitBut">立即提交</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+</div>
+</body>
+<script type="text/javascript">
+    layui.use(['upload', 'form'], function () {
+        var form = layui.form;
+        var upload = layui.upload;
+        //拖拽上传
+        upload.render({
+            elem: '#goodsPic',
+            url: '[[@{/banner/insert}]]'
+            , before: function (obj) {
+                //预读本地文件示例，不支持ie8
+                obj.preview(function (index, file, result) {
+                    $('#demo1').attr('src', result); //图片链接（base64）
+                });
+            }
+            , done: function (res) {
+                //如果上传失败
+                if (res.code != 200) {
+                    return layer.msg('上传失败');
+                } else {
+                    $("#image").val(res.src);
+                    return layer.msg('上传成功');
+                }
+            }
+        });
+    });
+
+    //增加
+    $(".layui-btn-sm").on("click", function () {
+        var seletc = $("#thymeleafTable").html();
+        let html = '<div class="layui-form-item">' +
+                seletc +
+            '            <label class="layui-form-label">数量</label>' +
+            '            <div class="layui-input-inline">' +
+            '                <input type="text" name="num" required autocomplete="off"' +
+            '                       class="layui-input">' +
+            '            </div>' +
+                '<button type="button" class="layui-btn layui-btn-sm" onclick="del(this)"><i class="layui-icon"></i></button>' +
+            '        </div>';
+        $(".tradd").append(html);
+    });
+
+    //删除
+    function del(e) {
+        $(e).parent("div").remove();
+    }
+</script>
+<script type="text/html" id="thymeleafTable">
+    <label class="layui-form-label">单品</label>
+    <div class="layui-input-inline">
+        <select name="oneId" style="display: block;width: 130px;height: 40px;border: 1px solid rgba(0, 0, 0, 0.08);">
+            <option th:each="p : ${shop}" th:text="${p.name}" th:value="${p.id}">请选择</option>
+        </select>
+    </div>
+</script>
+</html>
