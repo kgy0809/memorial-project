@@ -1,6 +1,6 @@
 spring:
   profiles:
     #开发时使用下面注释
-#   active: dev
+   active: dev
     #    打包时使用下面注释
-    active: prod
+#    active: prod

@@ -8,12 +8,6 @@ import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
 
-*/
-/**
- * @author NZL
- * @version 1.0
- * @date 2019/12/11 9:53
- *//*
 
 @WebListener
 @Component

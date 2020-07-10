@@ -54,7 +54,9 @@ public class ShopController {
     @ResponseBody
     public PageResultDTO<Shop> list(Integer page, Integer rows) {
         PageHelper.startPage(page, rows);
-        List<Shop> shops = shopMapper.selectAll();
+        Example example = new Example(Shop.class);
+        example.setOrderByClause(" weights desc ");
+        List<Shop> shops = shopMapper.selectByExample(example);
         PageInfo<Shop> sysBannerPageInfo = new PageInfo<>(shops);
         return new PageResultDTO<>(sysBannerPageInfo.getTotal(), shops);
     }

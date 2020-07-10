@@ -46,9 +46,9 @@
                 $.each(res.rows, function (index, ele) {
                     var state = '';
                     if (ele.state === '1'){
-                        state = '<td>' + '是' + '</td>' ;
-                    }else {
                         state = '<td>' + '否' + '</td>' ;
+                    }else {
+                        state = '<td>' + '是' + '</td>' ;
                     }
                     html += ' <tr>' +
                         '            <td>' + ele.id + '</td>' +
@@ -113,6 +113,7 @@
                         layer.msg('删除成功', {
                             icon: 1
                         });
+                        location.reload()
                     },
                     error: function (res) {
                         console.log(res);

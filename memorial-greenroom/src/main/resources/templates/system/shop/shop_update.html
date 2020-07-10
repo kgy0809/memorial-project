@@ -18,7 +18,7 @@
                 <input name="img" type="hidden" id="image" th:value="${shop.img}"/>
                 <i class="layui-icon"></i>
                 <p>点击上传，或将文件拖拽到此处</p>
-                <img class="layui-upload-img" id="demo1" th:src="${shop.img}">
+                <img class="layui-upload-img" id="demo1" th:src="${shop.img}" style="max-width: 196px">
                 <input type="hidden" name="id" th:value="${shop.id}">
             </div>
         </div>
@@ -40,6 +40,13 @@
             <label class="layui-form-label">元/小时</label>
             <div class="layui-input-inline shortInput">
                 <input type="text" name="hour" th:value="${shop.hour}" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权重</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="weights" th:value="${shop.weights}" required autocomplete="off"
                        class="layui-input">
             </div>
         </div>

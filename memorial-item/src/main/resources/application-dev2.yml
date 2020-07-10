@@ -68,3 +68,7 @@ logging:
   config: classpath:log4j2-back.xml
 swagger:
   enable: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true

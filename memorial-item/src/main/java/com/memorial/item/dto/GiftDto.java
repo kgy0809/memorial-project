@@ -1,7 +1,10 @@
 package com.memorial.item.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
+
+import java.util.Date;
 
 /**
  * @author kgy
@@ -17,4 +20,9 @@ public class GiftDto {
     private String time;
     @ApiModelProperty("图片Url")
     private String url;
+    @ApiModelProperty("新加时间")
+    @JsonFormat(locale = "zh", timezone = "GMT+8", pattern = "yyyy-MM-dd HH:mm:ss")
+    private Long newTime;
+    @ApiModelProperty("礼物名字")
+    private String shopName;
 }

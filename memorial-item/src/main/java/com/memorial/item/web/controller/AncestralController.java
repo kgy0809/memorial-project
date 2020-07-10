@@ -28,7 +28,7 @@ public class AncestralController {
     private MemorialService memorialService;
 
     @PostMapping
-    @ApiOperation(value = "纪念馆信息查询", notes = "纪念馆信息查询", response = Details.class)
+    @ApiOperation(value = "纪念馆信息查询", notes = "纪念馆信息查询", response = MemorialDto.class)
     @ApiImplicitParams({
             @ApiImplicitParam(name = "page", required = true, value = "1", dataType = "int"),
             @ApiImplicitParam(name = "rows", required = true, value = "10", dataType = "int"),

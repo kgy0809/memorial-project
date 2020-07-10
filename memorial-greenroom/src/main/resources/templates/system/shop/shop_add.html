@@ -17,7 +17,7 @@
                 <input name="img" type="hidden" id="image"/>
                 <i class="layui-icon"></i>
                 <p>点击上传，或将文件拖拽到此处</p>
-                <img class="layui-upload-img" id="demo1">
+                <img class="layui-upload-img" id="demo1" style="max-width: 196px">
             </div>
         </div>
         <div class="layui-form-item">
@@ -38,6 +38,13 @@
             <label class="layui-form-label">元/小时</label>
             <div class="layui-input-inline shortInput">
                 <input type="text" name="hour" required autocomplete="off"
+                       class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">权重</label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="weights" required autocomplete="off"
                        class="layui-input">
             </div>
         </div>

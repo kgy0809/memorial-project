@@ -4,12 +4,6 @@ package com.memorial.item.config;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-*/
-/**
- * @author NZL
- * @version 1.0
- * @date 2019/12/11 9:47
- *//*
 
 public class SSHConnection {
     String user = "root";

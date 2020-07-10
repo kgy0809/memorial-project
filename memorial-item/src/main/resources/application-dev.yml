@@ -66,3 +66,7 @@ mapper:
   not-empty: false
 swagger:
   enable: true
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true

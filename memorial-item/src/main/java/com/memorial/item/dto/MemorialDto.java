@@ -25,5 +25,7 @@ public class MemorialDto {
     private Integer shopSize;
     @ApiModelProperty("展示logo")
     private String img;
+    @ApiModelProperty("是否是自己创建的")
+    private Boolean flag;
 
 }

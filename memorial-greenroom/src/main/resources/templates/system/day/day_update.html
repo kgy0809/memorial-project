@@ -12,15 +12,13 @@
 
 <body>
 <div class="cBody">
-    <form id="addForm" class="layui-form" th:action="@{/ancestral/save}" method="post">
+    <form id="addForm" class="layui-form" th:action="@{/day/save}" method="post">
         <div class="layui-form-item">
-            <label class="layui-form-label">是否在首页</label>
-            <div class="layui-input-block">
-                <input type="radio" name="state" value="2" th:checked="@{(${memorial.state == '1'}? 'false' : 'true')}"
-                       title="是">
-                <input type="radio" name="state" value="1" th:checked="@{(${memorial.state == '1'}? 'true' : 'false')}"
-                       title="否">
-                <input type="hidden" name="id" th:value="${memorial.id}">
+            <label class="layui-form-label">天数 </label>
+            <div class="layui-input-inline shortInput">
+                <input type="text" name="day" required autocomplete="off"
+                       class="layui-input" th:value="${day.day}">
+                <input type="hidden" name="id" th:value="${day.id}">
             </div>
         </div>
         <div class="layui-form-item">
@@ -30,7 +28,6 @@
             </div>
         </div>
     </form>
-
 </div>
 </body>
 </html>

@@ -30,11 +30,11 @@ public class Shop {
     @Transient
     @ApiModelProperty("价格")
     private String doublePrice;
+    private Double weights;
 
     public void setPrice(Integer price) {
         this.doublePrice = price / 100 + "." + price % 100 / 10 + price % 100 % 10;
         this.price = price;
     }
-
 
 }

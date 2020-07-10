@@ -16,10 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import tk.mybatis.mapper.entity.Example;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author kgy
@@ -47,6 +45,8 @@ public class MemorialService {
     private TemplateMapper templateMapper;
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private DayMapper dayMapper;
 
     /**
      * 创建纪念馆
@@ -64,10 +64,18 @@ public class MemorialService {
         memorial.setUserId(userId);
         memorial.setState("2");
         memorial.setTime(new Date());
+        if (StringUtils.isEmpty(trendDate1) || "不详".equals(trendDate1)) {
+            memorial.setTrend1("9999-99-99");
+        } else {
+            memorial.setTrend1(trendDate1);
+        }
+        if (StringUtils.isEmpty(trendDate2) || "不详".equals(trendDate2)) {
+            memorial.setTrend2("9999-99-99");
+        } else {
+            memorial.setTrend2(trendDate2);
+        }
         memorial.setDate1(dateOfBirth1);
-        memorial.setTrend1(trendDate1);
         memorial.setDate2(dateOfBirth2);
-        memorial.setTrend2(trendDate2);
         memorialMapper.insert(memorial);
         return memorial.getId();
     }
@@ -123,7 +131,11 @@ public class MemorialService {
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
                         memorialDto.setShopSize(orders.size());
-
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
                     }
@@ -158,6 +170,11 @@ public class MemorialService {
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
                         memorialDto.setShopSize(orders.size());
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
                     }
@@ -191,6 +208,11 @@ public class MemorialService {
                         memorialDto.setName(list);
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setShopSize(orders.size());
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
@@ -225,6 +247,11 @@ public class MemorialService {
                         memorialDto.setName(list);
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setShopSize(orders.size());
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
@@ -233,40 +260,6 @@ public class MemorialService {
                 return new PageInfo<>(memorialDtos);
             }
         } else if ("2".equals(type)) {
-            /**
-             * 搜自己
-             */
-            /*PageHelper.startPage(page, rows);
-            Example example = new Example(Memorial.class);
-            example.setOrderByClause(" time desc ");
-            example.createCriteria().andEqualTo("userId", userId);
-            List<Memorial> memorials = memorialMapper.selectByExample(example);
-            memorialDtos = new ArrayList<>();
-            if (!memorials.isEmpty()) {
-                for (Memorial memorial : memorials) {
-                    MemorialDto memorialDto = new MemorialDto();
-                    List<String> list = new ArrayList<>();
-                    String[] split = memorial.getName().split("-");
-                    if (split.length > 0) {
-                        for (String s : split) {
-                            String[] split1 = s.split(",");
-                            list.add(split1[0]);
-                        }
-                    }
-                    Example orderEx = new Example(Order.class);
-                    orderEx.createCriteria().andEqualTo("detailsId", memorial.getId()).andNotEqualTo("state", "1");
-                    List<Order> orders = orderMapper.selectByExample(orderEx);
-                    memorialDto.setId(memorial.getId());
-                    memorialDto.setName(list);
-                    memorialDto.setSite(memorial.getSite());
-                    memorialDto.setText(memorial.getText());
-                    memorialDto.setShopSize(orders.size());
-                    memorialDto.setImg(plazaMsgImgs.get(0).getImg());
-                    memorialDtos.add(memorialDto);
-                }
-            }
-            return new PageInfo<>(memorialDtos);*/
-
             if (StringUtils.isEmpty(name) && StringUtils.isEmpty(site)) {
                 /**
                  * 搜 所有
@@ -296,7 +289,11 @@ public class MemorialService {
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
                         memorialDto.setShopSize(orders.size());
-
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
                     }
@@ -331,6 +328,11 @@ public class MemorialService {
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
                         memorialDto.setShopSize(orders.size());
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
                     }
@@ -365,6 +367,11 @@ public class MemorialService {
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
                         memorialDto.setShopSize(orders.size());
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
                     }
@@ -376,7 +383,7 @@ public class MemorialService {
                  */
                 PageHelper.startPage(page, rows);
                 Example example = new Example(Memorial.class);
-                example.createCriteria().andLike("site", "%" +site+ "%").andEqualTo("userId", userId);
+                example.createCriteria().andLike("site", "%" + site + "%").andEqualTo("userId", userId);
                 example.setOrderByClause(" time desc ");
                 List<Memorial> memorials = memorialMapper.selectByExample(example);
                 memorialDtos = new ArrayList<>();
@@ -399,6 +406,11 @@ public class MemorialService {
                         memorialDto.setSite(memorial.getSite());
                         memorialDto.setText(memorial.getText());
                         memorialDto.setShopSize(orders.size());
+                        if (userId.equals(memorial.getUserId())) {
+                            memorialDto.setFlag(true);
+                        } else {
+                            memorialDto.setFlag(false);
+                        }
                         memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                         memorialDtos.add(memorialDto);
                     }
@@ -410,11 +422,31 @@ public class MemorialService {
             /**
              * 搜首页
              */
-            PageHelper.startPage(page, rows);
-            Example example = new Example(Memorial.class);
-            example.setOrderByClause(" time desc ");
-            example.createCriteria().andEqualTo("state", "1");
-            List<Memorial> memorials = memorialMapper.selectByExample(example);
+            Date date = new Date();
+            Calendar calendar = new GregorianCalendar();
+            calendar.setTime(date);
+            Day day = dayMapper.selectAll().get(0);
+            calendar.add(calendar.DATE, day.getDay());
+            Date time = calendar.getTime();
+            SimpleDateFormat yearFormat = new SimpleDateFormat("yyyy");
+            String format = yearFormat.format(date);
+            String format1 = yearFormat.format(time);
+            List<Memorial> memorials = null;
+            if (day.getDay() >= 365) {
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+                PageHelper.startPage(page, rows);
+                memorials = memorialMapper.selectByExampleCustomizeAllYear(simpleDateFormat.format(date), simpleDateFormat.format(time));
+            } else {
+                if (!format.equals(format1)) {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+                    PageHelper.startPage(page, rows);
+                    memorials = memorialMapper.selectByExampleCustomizeYear(simpleDateFormat.format(date), simpleDateFormat.format(time));
+                } else {
+                    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM-dd");
+                    PageHelper.startPage(page, rows);
+                    memorials = memorialMapper.selectByExampleCustomize(simpleDateFormat.format(date), simpleDateFormat.format(time));
+                }
+            }
             memorialDtos = new ArrayList<>();
             if (!memorials.isEmpty()) {
                 for (Memorial memorial : memorials) {
@@ -434,6 +466,11 @@ public class MemorialService {
                     memorialDto.setName(list);
                     memorialDto.setSite(memorial.getSite());
                     memorialDto.setText(memorial.getText());
+                    if (userId.equals(memorial.getUserId())) {
+                        memorialDto.setFlag(true);
+                    } else {
+                        memorialDto.setFlag(false);
+                    }
                     memorialDto.setShopSize(orders.size());
                     memorialDto.setImg(plazaMsgImgs.get(0).getImg());
                     memorialDtos.add(memorialDto);
@@ -484,12 +521,21 @@ public class MemorialService {
         if (StringUtils.isEmpty(memorial.getTrend1())) {
             memorialDto2.setTrend1("");
         } else {
-            memorialDto2.setTrend1(memorial.getTrend1());
+            if ("9999-99-99".equals(memorial.getTrend1())) {
+                memorialDto2.setTrend1("不详");
+            } else {
+                memorialDto2.setTrend1(memorial.getTrend1());
+            }
         }
+
         if (StringUtils.isEmpty(memorial.getTrend2())) {
             memorialDto2.setTrend2("");
         } else {
-            memorialDto2.setTrend2(memorial.getTrend2());
+            if ("9999-99-99".equals(memorial.getTrend2())) {
+                memorialDto2.setTrend2("不详");
+            } else {
+                memorialDto2.setTrend2(memorial.getTrend2());
+            }
         }
         /**
          * 统计参与人数以及礼物个数
@@ -583,15 +629,25 @@ public class MemorialService {
         } else {
             nameAndRelationDto.setDate2(memorial.getDate2());
         }
+
         if (StringUtils.isEmpty(memorial.getTrend1())) {
             nameAndRelationDto.setTrend1("");
         } else {
-            nameAndRelationDto.setTrend1(memorial.getTrend1());
+            if ("9999-99-99".equals(memorial.getTrend1())) {
+                nameAndRelationDto.setTrend1("不详");
+            } else {
+                nameAndRelationDto.setTrend1(memorial.getTrend1());
+            }
         }
+
         if (StringUtils.isEmpty(memorial.getTrend2())) {
             nameAndRelationDto.setTrend2("");
         } else {
-            nameAndRelationDto.setTrend2(memorial.getTrend2());
+            if ("9999-99-99".equals(memorial.getTrend2())) {
+                nameAndRelationDto.setTrend2("不详");
+            } else {
+                nameAndRelationDto.setTrend2(memorial.getTrend2());
+            }
         }
         return nameAndRelationDto;
     }
@@ -602,10 +658,18 @@ public class MemorialService {
         memorial.setName(name);
         memorial.setSite(site);
         memorial.setText(text);
+        if (StringUtils.isEmpty(trendDate1) || "不详".equals(trendDate1)) {
+            memorial.setTrend1("9999-99-99");
+        } else {
+            memorial.setTrend1(trendDate1);
+        }
+        if (StringUtils.isEmpty(trendDate2) || "不详".equals(trendDate2)) {
+            memorial.setTrend2("9999-99-99");
+        } else {
+            memorial.setTrend2(trendDate2);
+        }
         memorial.setDate1(dateOfBirth1);
-        memorial.setTrend1(trendDate1);
         memorial.setDate2(dateOfBirth2);
-        memorial.setTrend2(trendDate2);
         memorialMapper.updateByPrimaryKeySelective(memorial);
     }
 
@@ -658,7 +722,7 @@ public class MemorialService {
             for (int i = 0; i < shops.size(); i++) {
                 Example example2 = new Example(Order.class);
                 example2.createCriteria().andEqualTo("shopId", shops.get(i).getId()).andEqualTo("state", "2").andEqualTo("detailsId", id);
-                example2.setOrderByClause(" time desc ");
+                example2.setOrderByClause(" time asc ");
                 List<Order> orders = orderMapper.selectByExample(example2);
                 List<GiftDto> list = new ArrayList<>();
                 if (!orders.isEmpty()) {
@@ -668,6 +732,8 @@ public class MemorialService {
                         GiftDto giftDto = new GiftDto();
                         giftDto.setName(user.getName());
                         giftDto.setUrl(shop.getImg());
+                        giftDto.setNewTime(order.getTime().getTime());
+                        giftDto.setShopName(shop.getName());
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(order.getTime());
                         cal.add(Calendar.HOUR, shop.getHour());// 24小时制
@@ -738,7 +804,7 @@ public class MemorialService {
             for (int i = 0; i < shops3.size(); i++) {
                 Example example2 = new Example(Order.class);
                 example2.createCriteria().andEqualTo("shopId", shops3.get(i).getId()).andEqualTo("state", "2").andEqualTo("detailsId", memorial.getId());
-                example2.setOrderByClause(" time desc ");
+                example2.setOrderByClause(" time asc ");
                 List<Order> orders1 = orderMapper.selectByExample(example2);
                 List<GiftDto> list = new ArrayList<>();
                 if (!orders1.isEmpty()) {
@@ -748,6 +814,8 @@ public class MemorialService {
                         GiftDto giftDto = new GiftDto();
                         giftDto.setName(user.getName());
                         giftDto.setUrl(shop.getImg());
+                        giftDto.setNewTime(order.getTime().getTime());
+                        giftDto.setShopName(shop.getName());
                         Calendar cal = Calendar.getInstance();
                         cal.setTime(order.getTime());
                         cal.add(Calendar.HOUR, shop.getHour());// 24小时制

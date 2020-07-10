@@ -3,6 +3,7 @@ package com.memorial.item.web.common;
 
 import com.memorial.common.constants.StatusCode;
 import com.memorial.common.dto.ResultDTO;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -12,13 +13,14 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
  * @date 2019/12/26 9:34
  */
 @RestControllerAdvice
+@Slf4j
 public class BaseExceptionHandler {
 
     //只要Controller方法有异常，则会自动执行该方法
     @ExceptionHandler//默认处理所有异常
     public ResultDTO error(Throwable e){
         //记录日志（发邮件、发短信、、、、）
-        System.out.println("记录日志：发生了异常");
+        log.error("记录日志：发生了异常" + e);
         e.printStackTrace();
         //返回结果
         return new ResultDTO(false, StatusCode.ERROR,e.getMessage());

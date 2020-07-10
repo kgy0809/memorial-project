@@ -142,6 +142,7 @@ public class DetailsService {
     public List<Shop> queryShop(String type) {
         Example example = new Example(Shop.class);
         example.createCriteria().andEqualTo("state", type);
+        example.setOrderByClause(" weights desc ");
         return shopMapper.selectByExample(example);
     }
 

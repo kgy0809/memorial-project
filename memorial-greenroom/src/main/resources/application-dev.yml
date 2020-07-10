@@ -35,7 +35,7 @@ spring:
       datasource:
         master:
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://localhost:3307/memorial?useUnicode=true&&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
+          url: jdbc:mysql://119.3.83.59:3306/memorial?useUnicode=true&&characterEncoding=utf8&useSSL=false&serverTimezone=UTC
           username: db136s1ehvo1yn73
           password: cxz307311SJK
           type: org.apache.commons.dbcp2.BasicDataSource
